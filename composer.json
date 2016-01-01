@@ -1,8 +1,7 @@
 {
     "require": {
         "silex/silex": "~1.3",
-        "doctrine/orm": "v2.5.3",
-        "doctrine/migrations": "v1.2.1"
+        "doctrine/dbal": "~2.2"
     },
     "autoload": {
         "psr-4": {"Czettner\\GpsLogger\\": "src/Czettner/GpsLogger/"}
