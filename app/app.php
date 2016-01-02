@@ -2,7 +2,7 @@
 
 use \Czettner\GpsLogger\Devices;
 
-$app = require_once __DIR__.'/bootstrap.php';
+$app = require __DIR__.'/bootstrap.php';
 
 $app->get('/devices', function () use ($app) {
     $devices = new Devices($app['db']);

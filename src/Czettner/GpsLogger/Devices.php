@@ -13,6 +13,6 @@ class Devices
     public function getAllDevices()
     {
         // TODO
-        return $this->db->fetchAll('SHOW TABLES;');
+        return $this->db->fetchAll('SELECT * FROM `devices`;');
     }
 }
