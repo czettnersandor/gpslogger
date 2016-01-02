@@ -1,0 +1,15 @@
+<?php
+
+return [
+    'db' => [
+        'driver'    => 'pdo_mysql',
+        'host'      => 'localhost',
+        'dbname'    => 'databasename',
+        'user'      => 'username',
+        'password'  => 'password',
+        'charset'   => 'utf8mb4'
+    ],
+    'misc' => [
+        'debug'     => true
+    ]
+];

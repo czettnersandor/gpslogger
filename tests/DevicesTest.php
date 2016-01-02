@@ -22,12 +22,19 @@ class DevicesTest extends WebTestCase
                 'path'     => __DIR__.'/phpunit.db',
             ),
         ));
-        
+
         // Empty database
         if (file_exists($this->dbFile)) {
             unlink($this->dbFile);
         }
         require(__DIR__.'/../install.php');
+
+        // Fill database with dummy data
+        $sql = "INSERT INTO `devices` (id, name)
+            VALUES (1, 'My Galaxy S3');
+        ";
+
+        $app['db']->executeQuery($sql);
 
         return $app;
     }
@@ -42,5 +49,6 @@ class DevicesTest extends WebTestCase
 
         $this->assertTrue($client->getResponse()->isOk());
         $this->assertCount(1, $crawler->filter('h1:contains("Devices")'));
+        $this->assertCount(1, $crawler->filter('li:contains("My Galaxy S3")'));
     }
 }

@@ -1,4 +1,6 @@
 <h1>Devices</h1>
+<ul>
 {% for item in devices %}
-    {{dump(item)}}
+    <li>{{item.name}}</li>
 {% endfor %}
+</ul>

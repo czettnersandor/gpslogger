@@ -1,3 +1,4 @@
 vendor
 config/*.php
 !config/*.php.dist
+tests/phpunit.db
