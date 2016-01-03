@@ -13,18 +13,19 @@ if (!isset($app)) {
 }
 
 $sql = "CREATE TABLE IF NOT EXISTS `devices` (
-   `id` INT PRIMARY KEY     NOT NULL,
-   `name`          TEXT    NOT NULL
+   `id` INTEGER PRIMARY KEY,
+   `name` TEXT NOT NULL
 )
 ";
 
 $app['db']->executeQuery($sql);
 
 $sql = "CREATE TABLE IF NOT EXISTS `positions` (
-   `id` INT PRIMARY KEY     NOT NULL,
-   `device_id`      INT     NOT NULL,
-   `lat`            INT     NOT NULL,
-   `lng`            INT     NOT NULL
+   `id` INTEGER PRIMARY KEY,
+   `device_id` INT     NOT NULL,
+   `timestamp` INT     NOT NULL,
+   `lat`       INT     NOT NULL,
+   `lng`       INT     NOT NULL
 )
 ";
 

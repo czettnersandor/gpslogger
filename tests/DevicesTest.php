@@ -14,6 +14,7 @@ class DevicesTest extends WebTestCase
     {
         $app = require __DIR__.'/../app/app.php';
         $app['debug'] = true;
+        unset($app['exception_handler']);
 
         // Modify the database service provider to use SQLite for tests
         $app->register(new \Silex\Provider\DoctrineServiceProvider(), array(
@@ -35,6 +36,7 @@ class DevicesTest extends WebTestCase
         ";
 
         $app['db']->executeQuery($sql);
+        $this->app = $app;
 
         return $app;
     }
@@ -50,5 +52,25 @@ class DevicesTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isOk());
         $this->assertCount(1, $crawler->filter('h1:contains("Devices")'));
         $this->assertCount(1, $crawler->filter('li:contains("My Galaxy S3")'));
+    }
+
+    public function testLogPosition()
+    {
+        $client = $this->createClient();
+        $crawler = $client->request(
+            'POST',
+            '/log',
+            [
+                'device' => 1,
+                'lat' => 66,
+                'lng' => 88.99
+            ]
+        );
+        $this->assertTrue($client->getResponse()->isOk());
+
+        $results = $this->app['db']->fetchAssoc('SELECT * FROM `positions`;');
+        $this->assertCount(5, $results);
+        $this->assertEquals($results['lat'], 66);
+        $this->assertEquals($results['lng'], 88.99);
     }
 }

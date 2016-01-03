@@ -1,6 +1,9 @@
 <?php
 
-use \Czettner\GpsLogger\Devices;
+use Czettner\GpsLogger\Devices;
+use Czettner\GpsLogger\Log;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 $app = require __DIR__.'/bootstrap.php';
 
@@ -11,12 +14,15 @@ $app->get('/devices', function () use ($app) {
     ));
 });
 
-$app->post('/log', function (Request $request) {
+$app->post('/log', function (Request $request) use ($app) {
     $device = $request->get('device');
     $lat = $request->get('lat');
     $lng = $request->get('lng');
 
-    return new Response('SUCCESS', 201);
+    $log = new Log($app['db']);
+    $log->logPosition($device, $lat, $lng);
+
+    return new Response('SUCCESS', 200);
 });
 
 return $app;
