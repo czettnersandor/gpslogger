@@ -1,6 +1,6 @@
 <?php
 namespace Czettner\GpsLogger;
 
-class LogException extends Exception
+class LogException extends \Exception
 {
 }

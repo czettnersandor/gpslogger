@@ -2,6 +2,7 @@
 
 use Czettner\GpsLogger\Devices;
 use Czettner\GpsLogger\Log;
+use Czettner\GpsLogger\LogException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +21,11 @@ $app->post('/log', function (Request $request) use ($app) {
     $lng = $request->get('lng');
 
     $log = new Log($app['db']);
-    $log->logPosition($device, $lat, $lng);
+    try {
+        $log->logPosition($device, $lat, $lng);
+    } catch (LogException $e) {
+        return new Response($e->getMessage(), 503);
+    }
 
     return new Response('SUCCESS', 200);
 });

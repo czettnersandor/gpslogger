@@ -12,8 +12,8 @@ class Log
 
     public function isAlreadyExist($deviceId, $timestamp, $lat, $lng)
     {
-        // TODO
-        return false;
+        $count = $this->db->fetchAssoc('SELECT COUNT(*) AS count FROM positions WHERE timestamp = ? AND device_id = ?', [$timestamp, $deviceId]);
+        return ($count['count'] != 0);
     }
 
     public function logPosition($deviceId, $lat, $lng)
