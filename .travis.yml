@@ -6,6 +6,6 @@ php:
   - nightly
 
 before_script:
-  - echo "return['db'=>['driver'=>'pdo_sqlite','file'=>__DIR__.'/database.db'],'misc'=>['debug'=>true]];" > config/config.php
+  - echo "<?php return['db'=>['driver'=>'pdo_sqlite','file'=>__DIR__.'/database.db'],'misc'=>['debug'=>true]];" > config/config.php
   - composer install
-  
+
