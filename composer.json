@@ -6,10 +6,10 @@
         "phpunit/phpunit": "^5.1"
     },
     "autoload": {
-        "psr-4": {"Czettner\\GpsLogger\\": "src/Czettner/GpsLogger/"}
-    },
-    "autoload": {
-        "psr-4": {"Czettner\\GpsLoggerTests\\": "tests/"}
+        "psr-4": {
+            "Czettner\\GpsLogger\\": "src/Czettner/GpsLogger/",
+            "Czettner\\GpsLoggerTests\\": "tests/"
+        }
     },
     "require-dev": {
         "symfony/browser-kit": "^3.0",
