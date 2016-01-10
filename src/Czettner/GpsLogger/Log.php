@@ -10,7 +10,7 @@ class Log
         $this->db = $db;
     }
 
-    public function isAlreadyExist($deviceId, $timestamp, $lat, $lng)
+    public function isAlreadyExist($deviceId, $timestamp)
     {
         $count = $this->db->fetchAssoc('SELECT COUNT(*) AS count FROM positions WHERE timestamp = ? AND device_id = ?', [$timestamp, $deviceId]);
         return ($count['count'] != 0);
@@ -26,7 +26,7 @@ class Log
     {
         $timestamp = time();
         $deviceId = $this->getIdFromHash($hash);
-        if ($this->isAlreadyExist($deviceId, $timestamp, $lat, $lng)) {
+        if ($this->isAlreadyExist($deviceId, $timestamp)) {
             throw new LogException("Position already exists.", 1);
         }
         return $this->db->insert('positions', [
