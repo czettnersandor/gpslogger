@@ -1,5 +1,5 @@
 <?php
-namespace GpsLogger\Tests;
+namespace Czettner\GpsLoggerTests;
 
 use Silex\WebTestCase;
 use Silex\Provider\DoctrineServiceProvider;

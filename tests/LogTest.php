@@ -1,10 +1,8 @@
 <?php
-namespace GpsLogger\Tests;
+namespace Czettner\GpsLoggerTests;
 
 use Silex\WebTestCase;
 use Silex\Provider\DoctrineServiceProvider;
-
-require_once('AbstractWebTestCase.php');
 
 class LogTest extends AbstractWebTestCase
 {
