@@ -16,13 +16,13 @@ $app->get('/devices', function () use ($app) {
 });
 
 $app->post('/log', function (Request $request) use ($app) {
-    $device = $request->get('device');
     $lat = $request->get('lat');
     $lng = $request->get('lng');
+    $hash = $request->get('hash');
 
     $log = new Log($app['db']);
     try {
-        $log->logPosition($device, $lat, $lng);
+        $log->logPosition($hash, $lat, $lng);
     } catch (LogException $e) {
         return new Response($e->getMessage(), 503);
     }

@@ -14,7 +14,8 @@ if (!isset($app)) {
 
 $sql = "CREATE TABLE IF NOT EXISTS `devices` (
    `id` INTEGER PRIMARY KEY,
-   `name` TEXT NOT NULL
+   `name` TEXT NOT NULL,
+   `hash` TEXT NOT NULL
 )
 ";
 

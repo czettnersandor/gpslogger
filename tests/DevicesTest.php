@@ -31,8 +31,8 @@ class DevicesTest extends WebTestCase
         require(__DIR__.'/../install.php');
 
         // Fill database with dummy data
-        $sql = "INSERT INTO `devices` (id, name)
-            VALUES (1, 'My Galaxy S3');
+        $sql = "INSERT INTO `devices` (id, name, hash)
+            VALUES (1, 'My Galaxy S3', 'mydevicehash');
         ";
 
         $app['db']->executeQuery($sql);
@@ -52,6 +52,7 @@ class DevicesTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isOk());
         $this->assertCount(1, $crawler->filter('h1:contains("Devices")'));
         $this->assertCount(1, $crawler->filter('li:contains("My Galaxy S3")'));
+        $this->assertCount(1, $crawler->filter('li > span:contains("mydevicehash")'));
     }
 
     /**
@@ -64,9 +65,10 @@ class DevicesTest extends WebTestCase
             'POST',
             '/log',
             [
-                'device' => 1,
                 'lat' => 66,
-                'lng' => 88.99
+                'lng' => 88.99,
+                'timestamp' => 123456,
+                'hash' => 'mydevicehash',
             ]
         );
         $this->assertTrue($client->getResponse()->isOk());
@@ -81,9 +83,10 @@ class DevicesTest extends WebTestCase
     {
         $client = $this->createClient();
         $logData = [
-            'device' => 1,
             'lat' => 66,
-            'lng' => 88.99
+            'lng' => 88.99,
+            'timestamp' => 123456,
+            'hash' => 'mydevicehash',
         ];
         $crawler = $client->request('POST', '/log', $logData);
         $this->assertTrue($client->getResponse()->isOk());

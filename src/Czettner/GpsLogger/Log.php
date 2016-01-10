@@ -16,9 +16,16 @@ class Log
         return ($count['count'] != 0);
     }
 
-    public function logPosition($deviceId, $lat, $lng)
+    protected function getIdFromHash($hash)
+    {
+        $res = $this->db->fetchAssoc('SELECT id FROM devices WHERE hash = ?;', [$hash]);
+        return $res['id'];
+    }
+
+    public function logPosition($hash, $lat, $lng)
     {
         $timestamp = time();
+        $deviceId = $this->getIdFromHash($hash);
         if ($this->isAlreadyExist($deviceId, $timestamp, $lat, $lng)) {
             throw new LogException("Position already exists.", 1);
         }
