@@ -1,0 +1,9 @@
+language: php
+php:
+  - '5.6'
+  - '7.0'
+  - hhvm
+  - nightly
+
+before_script:
+  - echo "return['db'=>['driver'=>'pdo_sqlite','file'=>__DIR__.'/database.db'],'misc'=>['debug'=>true]];" > config/config.php
