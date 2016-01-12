@@ -6,6 +6,10 @@ $config = require_once __DIR__.'/../config/config.php';
 
 $app['debug'] = $config['misc']['debug'];
 
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => __DIR__.'/../var/development.log',
+));
+
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => $config['db'],
 ));
