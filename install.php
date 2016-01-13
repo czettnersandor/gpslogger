@@ -13,22 +13,26 @@ if (!isset($app)) {
     $app = require(__DIR__.'/app/app.php');
 }
 
-$sql = "CREATE TABLE IF NOT EXISTS `devices` (
-   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-   `name` TEXT NOT NULL,
-   `hash` TEXT NOT NULL
-)
-";
+$schema = new \Doctrine\DBAL\Schema\Schema();
 
-$app['db']->executeQuery($sql);
+$devicesTable = $schema->createTable("devices");
+$devicesTable->addColumn("id", "integer", ["unsigned" => true, 'autoincrement' => true]);
+$devicesTable->addColumn("name", "string", ["length" => 128]);
+$devicesTable->addColumn("hash", "string", ["length" => 256]);
+$devicesTable->setPrimaryKey(array("id"));
+$devicesTable->addUniqueIndex(array("hash"));
 
-$sql = "CREATE TABLE IF NOT EXISTS `positions` (
-   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-   `device_id` INT     NOT NULL,
-   `timestamp` INT     NOT NULL,
-   `lat`       FLOAT   NOT NULL,
-   `lng`       FLOAT   NOT NULL
-)
-";
+$posTable = $schema->createTable("positions");
+$posTable->addColumn("id", "integer", ["unsigned" => true, 'autoincrement' => true]);
+$posTable->addColumn("device_id", "integer", ["unsigned" => true]);
+$posTable->addColumn("timestamp", "integer", ["unsigned" => true]);
+$posTable->addColumn("lat", "float", []);
+$posTable->addColumn("lng", "float", []);
+$posTable->setPrimaryKey(array("id"));
 
-$app['db']->executeQuery($sql);
+$platform = $app['db']->getDatabasePlatform();
+$queries = $schema->toSql($platform);
+
+foreach ($queries as $query) {
+    $app['db']->executeQuery($query);
+}

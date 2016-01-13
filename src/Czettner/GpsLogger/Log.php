@@ -4,10 +4,12 @@ namespace Czettner\GpsLogger;
 class Log
 {
     protected $db;
+    protected $app;
 
-    public function __construct(\Doctrine\DBAL\Connection $db)
+    public function __construct(\Doctrine\DBAL\Connection $db, \Silex\Application $app)
     {
         $this->db = $db;
+        $this->app = $app;
     }
 
     public function isAlreadyExist($deviceId, $timestamp)
@@ -29,6 +31,7 @@ class Log
         if ($this->isAlreadyExist($deviceId, $timestamp)) {
             throw new LogException("Position already exists.", 1);
         }
+        $this->app['monolog']->addInfo(sprintf("Position logged: %d: lat:%f, lng:%f.", $deviceId, $lat, $lng));
         return $this->db->insert('positions', [
             'device_id' => $deviceId,
             'timestamp' => $timestamp,

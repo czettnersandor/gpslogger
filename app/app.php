@@ -20,7 +20,7 @@ $app->post('/log', function (Request $request) use ($app) {
     $lng = $request->get('lng');
     $hash = $request->get('hash');
 
-    $log = new Log($app['db']);
+    $log = new Log($app['db'], $app);
     try {
         $log->logPosition($hash, $lat, $lng);
     } catch (LogException $e) {
