@@ -9,10 +9,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app = require __DIR__.'/bootstrap.php';
 
+$app->before(function () use ($app) {
+    $app['twig']->addGlobal('html', $app['twig']->loadTemplate('html.twig'));
+});
+
 $app->get('/devices', function () use ($app) {
     $devices = new Devices($app['db']);
     return $app['twig']->render('devices.twig', array(
         'devices' => $devices->getAllDevices(),
+    ));
+});
+
+$app->get('/map', function () use ($app) {
+    $devices = new Devices($app['db']);
+    return $app['twig']->render('map.twig', array(
+        'history' => $devices->getAllDevices(),
     ));
 });
 
