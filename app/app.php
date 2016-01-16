@@ -2,6 +2,7 @@
 
 use Czettner\GpsLogger\Devices;
 use Czettner\GpsLogger\Log;
+use Czettner\GpsLogger\History;
 use Czettner\GpsLogger\LogException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,14 +16,22 @@ $app->get('/devices', function () use ($app) {
     ));
 });
 
+$app->get('/history/{hash}', function ($hash) use ($app) {
+    $log = new Log($app['db'], $app);
+    $deviceId = $log->getIdFromHash($hash);
+    $history = new History($app['db']);
+    return new Response(json_encode($history->getLast24h($deviceId)), 200);
+});
+
 $app->post('/log', function (Request $request) use ($app) {
     $lat = $request->get('lat');
     $lng = $request->get('lng');
+    $timestamp = $request->get('timestamp');
     $hash = $request->get('hash');
 
     $log = new Log($app['db'], $app);
     try {
-        $log->logPosition($hash, $lat, $lng);
+        $log->logPosition($hash, $lat, $lng, $timestamp);
     } catch (LogException $e) {
         return new Response($e->getMessage(), 503);
     }
