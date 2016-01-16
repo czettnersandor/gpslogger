@@ -34,6 +34,13 @@ $app->get('/history/{hash}', function ($hash) use ($app) {
     return new Response(json_encode($history->getLast24h($deviceId)), 200);
 });
 
+$app->get('/allhistory', function () use ($app) {
+    $log = new Log($app['db'], $app);
+    $deviceId = $log->getIdFromHash($hash);
+    $history = new History($app['db']);
+    return new Response(json_encode($history->getLast24hAll()), 200);
+});
+
 $app->post('/log', function (Request $request) use ($app) {
     $lat = $request->get('lat');
     $lng = $request->get('lng');

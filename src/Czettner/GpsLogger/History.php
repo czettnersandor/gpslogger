@@ -17,4 +17,12 @@ class History
             [$deviceId, time() - 24 * 60 * 60]
         );
     }
+
+    public function getLast24hAll()
+    {
+        return $this->db->fetchAll(
+            'SELECT * FROM `positions` WHERE `timestamp` > ?;',
+            [time() - 24 * 60 * 60]
+        );
+    }
 }
