@@ -1,23 +1,36 @@
 Zepto(function($){
 
-    var map = new OpenLayers.Map("mapdiv");
-    map.addLayer(new OpenLayers.Layer.OSM());
+    var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 46],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            src: 'https://www.pragueeventscalendar.com/src/templates/images/web/marker_icon.png'
+        }))
+    });
 
-    var lineStyle = {
-      strokeColor: '#0000ff',
-      strokeOpacity: 0.5,
-      strokeWidth: 5
-    };
+    var vectorSource = new ol.source.Vector({
+    });
 
-    var lineLayer = new OpenLayers.Layer.Vector("Line Layer");
+    //add the feature vector to the layer vector, and apply a style to whole layer
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: iconStyle
+    });
 
-    map.addLayer(lineLayer);
-    //map.addControl(new OpenLayers.Control.DrawFeature(lineLayer, OpenLayers.Handler.Path));
-
-    var devices = []; // TODO
-
-    var markerLayer = new OpenLayers.Layer.Markers("Markers");
-    map.addLayer(markerLayer);
+    var map = new ol.Map({
+        layers: [
+            new ol.layer.Tile({ source: new ol.source.OSM() }),
+            vectorLayer
+        ],
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 2
+        }),
+        target: 'mapdiv',
+        renderer: 'canvas',
+    });
 
     // Get last positions
     $.ajax({
@@ -31,30 +44,41 @@ Zepto(function($){
         var points = []; // for path
 
         $.each(data, function(key, value){
-          console.log(value);
-          lonLat = OpenLayers.Projection.transform([value.lng, value.lat], 'EPSG:4326', 'EPSG:3857')
-          points.push(lonLat);
-          lastLat = value.lat;
-          lastLng = value.lng;
+            console.log(value);
+            points.push([value.lng, value.lat]);
+            lastLat = value.lat;
+            lastLng = value.lng;
         });
 
         console.log(points);
 
         // Path
-        var line = new OpenLayers.Geometry.LineString(points);
 
-        var lineFeature = new OpenLayers.Feature.Vector(line, null, lineStyle);
-        console.log(line);
-        lineLayer.addFeatures([lineFeature]);
+        var points = [
+        [lastLng, lastLat], [0, 0]
+        ];
 
+        lineFeature = new ol.Feature({
+            geometry: new ol.geom.LineString(points),
+            name: 'Line'
+        });
+
+        vectorSource.addFeature(lineFeature);
+
+
+        console.log(lineFeature);
         // Marker
-        lonLat = new OpenLayers.LonLat(lastLng,lastLat)
-            .transform(
-                new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-                map.getProjectionObject() // to Spherical Mercator Projection
-            );
-        markerLayer.addMarker(new OpenLayers.Marker(lonLat));
-        map.zoomToExtent(markerLayer.getDataExtent());
+
+        var iconFeature = new ol.Feature({
+            geometry: new
+              ol.geom.Point([lastLng, lastLat]),
+            name: 'Null Island ',
+            population: 4000,
+            rainfall: 500
+        });
+        vectorSource.addFeature(iconFeature);
+
+        //map.zoomToExtent(markerLayer.getDataExtent());
       },
       error: function(xhr, type){
         alert('Ajax error!');
