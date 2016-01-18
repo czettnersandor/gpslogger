@@ -11,6 +11,7 @@ Zepto(function($){
     });
 
     var vectorSource = new ol.source.Vector({
+        projection: ol.proj.get('EPSG:4326')
     });
 
     //add the feature vector to the layer vector, and apply a style to whole layer
@@ -24,9 +25,10 @@ Zepto(function($){
             new ol.layer.Tile({ source: new ol.source.OSM() }),
             vectorLayer
         ],
-        view: new ol.View({
-            center: [0, 0],
-            zoom: 2
+        view: new ol.View2D({
+            projection: 'EPSG:1234',
+            center: ol.proj.transform(new ol.Coordinate(-111, 45), 'EPSG:4326', 'EPSG:1234'),
+            zoom: 3
         }),
         target: 'mapdiv',
         renderer: 'canvas',
