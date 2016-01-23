@@ -33,13 +33,14 @@ Zepto(function($){
 
         $.each(data, function(key, value){
             console.log(value);
-            points.push([value.lat, value.lng]);
-            lastLat = value.lat;
-            lastLng = value.lng;
+            lastLat = parseFloat(value.lat);
+            lastLng = parseFloat(value.lng);
+            points.push([lastLat, lastLng]);
             L.marker([lastLat, lastLng], {icon: greenIcon}).bindPopup("I am a green leaf.").addTo(map);
         });
 
-        var arrow = L.polyline([[57, -19], [60, -12]], {}).addTo(map);
+        console.log(points);
+        var arrow = L.polyline(points, {}).addTo(map);
         console.log(points);
         // create a red polyline from an array of LatLng points
         
