@@ -1,4 +1,6 @@
 {
+    "name": "czettner/gpslogger",
+    "description": "GPS logger server to be used by GPS logger devices",
     "require": {
         "silex/silex": "~1.3",
         "doctrine/dbal": "~2.2",
